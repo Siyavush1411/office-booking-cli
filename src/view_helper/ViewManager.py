@@ -1,6 +1,7 @@
 from  .TextStyle import TextStyle
 from .TextLayout import TextMarkupBuilder
 
+
 class ViewManager:
     
     @staticmethod
