@@ -2,15 +2,12 @@ import sqlite3
 from typing import Type
 from typing import Any
 
-from src.database.database import init_db
-
 
 class Migration:
     def __init__(self, cls: list):
         self.cls = cls
 
     def migrate(self):
-        init_db()
         conn = sqlite3.connect("booking.db")
         c = conn.cursor()
         for cls in self.cls:
