@@ -3,7 +3,6 @@ from dataclasses import dataclass
 
 @dataclass
 class Booking:
-    id: int
     room_id: int
     username: str
     email: str
