@@ -1,12 +1,15 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from database.base_model import BaseModel
 
 
 @dataclass
-class Booking:
-    id: int
+class Booking(BaseModel):
+    id: int | None = field(default=0, init=False)
     room_id: int
-    username: str
+    user_id: int
     email: str
     phone: str
     start_date: str
     end_date: str
+
+    foreign_keys = {"room_id": ("room", "id"), "user_id": ("user", "id")}
