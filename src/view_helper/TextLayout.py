@@ -12,9 +12,9 @@ class TextMarkupBuilder:
 
         width = os.get_terminal_size().columns
 
-        if align == 'center':
+        if align == "center":
             return self.text.center(width)
-        elif align == 'right':
+        elif align == "right":
             return self.text.rjust(width)
-        elif align == 'left':
-            return self.text.ljust(width)    
+        elif align == "left":
+            return self.text.ljust(width)

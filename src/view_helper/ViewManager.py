@@ -1,21 +1,24 @@
-from  .TextStyle import TextStyle
+from .TextStyle import TextStyle
 from .TextLayout import TextMarkupBuilder
 
 
 class ViewManager:
-    
+    def __init__(self):
+        pass
+
     @staticmethod
     def style_text(text: str) -> str:
         return TextStyle(text)
-    
+
     @staticmethod
     def align_text(text: str) -> str:
         markup = TextMarkupBuilder(text)
         return markup
-    
+
+    @staticmethod
     def align_massive_center(text: str) -> str:
         str_list = text.splitlines()
         centered_lines = []
         for line in str_list:
             centered_lines.append(ViewManager.align_text(line).center)
-        return "\n".join(centered_lines) 
+        return "\n".join(centered_lines)
