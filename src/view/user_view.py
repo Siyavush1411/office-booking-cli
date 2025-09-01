@@ -1,4 +1,6 @@
-from .main_menu import MainMenuView
+from models import user
+from .menu import RoomChoiceView
+from .menu import MainMenuView
 from .utils.user_confirmations import UserConfirmations
 from service import UserService
 from models.user import User
@@ -61,11 +63,22 @@ class UserLoginView:
 class UserActionView:
     def __init__(self):
         self.view_service = ViewService()
+        self.user_registration = UserRegistrationView()
+        self.user_login = UserLoginView()
 
     def display_user_dashboard(self):
         self.view_service.start()
         user_input = input("Нажмите 1 для регистрации или 2 для входа: ")
+        is_success = self._user_auth_choice(user_input)
+        if is_success:
+            RoomChoiceView().display_room_choice()
+
+    def _user_auth_choice(self, user_input: str):
         if user_input == "1":
-            self.register_user()
+            self.user_registration.register_user()
         elif user_input == "2":
-            self.login_user()
+            self.user_login.login_user()
+        else:
+            user_input = input("Неверный ввод. Пожалуйста, нажмите 1 для регистрации или 2 для входа: ")
+            self._user_auth_choice(user_input)
+        return True

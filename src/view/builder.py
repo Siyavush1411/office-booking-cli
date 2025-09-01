@@ -1,4 +1,4 @@
-from .main_menu import MainMenuView
+from .menu import MainMenuView
 
 
 class ViewBuilder:
