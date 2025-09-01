@@ -6,3 +6,4 @@ from database.base_model import BaseModel
 class Room(BaseModel):
     id: int | None = field(default=0, init=False)
     name: str
+    is_busy: bool = False
