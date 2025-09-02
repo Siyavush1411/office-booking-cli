@@ -6,6 +6,9 @@ from .menu import MainMenuView
 from .utils.user_confirmations import UserConfirmations
 from services.user_service import UserService
 from models.user import User
+from .utils.user_action_lazy_init import UserActionLazyInitialization
+
+
 
 
 class ViewService:
@@ -62,13 +65,7 @@ class UserLoginView:
         print(f"Пользователь {username} вошел в систему.")
 
 
-class UserActionView:
-    def __init__(self):
-        self.view_service = ViewService()
-        self.user_registration = UserRegistrationView()
-        self.user_login = UserLoginView()
-        self.room_display = RoomDisplayService()
-
+class UserActionView(UserActionLazyInitialization):
     def display_user_dashboard(self):
         self.view_service.start()
         user_input = input("Нажмите 1 для регистрации или 2 для входа: ")
@@ -78,7 +75,6 @@ class UserActionView:
             selected_room = Room.get("id", result)
             selected_room.update(selected_room.id, is_busy=True),
 
-
     def _user_auth_choice(self, user_input: str):
         if user_input == "1":
             self.user_registration.register_user()
@@ -86,11 +82,11 @@ class UserActionView:
             self.user_login.login_user()
         else:
             user_input = input("Неверный ввод. Пожалуйста, нажмите 1 для регистрации или 2 для входа: ")
+            os.system('cls' if os.name == 'nt' else 'clear')
             self._user_auth_choice(user_input)
         return True
 
     def _user_room_choice(self):
-        os.system('cls' if os.name == 'nt' else 'clear')
         self.room_display.display_all_rooms()
         user_input = input("Выберите номер комнаты: ")
         rooms = Room.get_all()
@@ -101,9 +97,12 @@ class UserActionView:
             print("Введите число.")
             return None
         if 1 <= choice <= len(rooms):
+            if rooms[choice - 1].is_busy:
+                os.system('cls' if os.name == 'nt' else 'clear')
+                return self._user_room_choice()
+                print("Комната занята. Пожалуйста, выберите другую комнату.")
             return choice
         else:
             os.system('cls' if os.name == 'nt' else 'clear')
             print("Неверный ввод. Пожалуйста, выберите номер комнаты из списка.")
             return None
-
