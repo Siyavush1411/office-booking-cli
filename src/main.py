@@ -1,11 +1,13 @@
 from database import init_db
-from services.room_service import RoomDisplayService
-from models.room import Room
+from view.user_view import UserActionView
 
 
 def main():
     init_db()
-    RoomDisplayService().display_all_rooms()
+
+    user_action_view = UserActionView()
+
+    user_action_view.display_user_dashboard()
 
 
 if __name__ == "__main__":

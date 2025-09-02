@@ -1,8 +1,10 @@
-from models import user
-from .menu import RoomChoiceView
+import os
+
+from models import Room
+from services.room_service import RoomDisplayService
 from .menu import MainMenuView
 from .utils.user_confirmations import UserConfirmations
-from service import UserService
+from services.user_service import UserService
 from models.user import User
 
 
@@ -65,13 +67,17 @@ class UserActionView:
         self.view_service = ViewService()
         self.user_registration = UserRegistrationView()
         self.user_login = UserLoginView()
+        self.room_display = RoomDisplayService()
 
     def display_user_dashboard(self):
         self.view_service.start()
         user_input = input("Нажмите 1 для регистрации или 2 для входа: ")
         is_success = self._user_auth_choice(user_input)
         if is_success:
-            RoomChoiceView().display_room_choice()
+            result = self._user_room_choice()
+            selected_room = Room.get("id", result)
+            selected_room.update(selected_room.id, is_busy=True),
+
 
     def _user_auth_choice(self, user_input: str):
         if user_input == "1":
@@ -82,3 +88,22 @@ class UserActionView:
             user_input = input("Неверный ввод. Пожалуйста, нажмите 1 для регистрации или 2 для входа: ")
             self._user_auth_choice(user_input)
         return True
+
+    def _user_room_choice(self):
+        os.system('cls' if os.name == 'nt' else 'clear')
+        self.room_display.display_all_rooms()
+        user_input = input("Выберите номер комнаты: ")
+        rooms = Room.get_all()
+        try:
+            choice = int(user_input)
+        except ValueError:
+            os.system('cls' if os.name == 'nt' else 'clear')
+            print("Введите число.")
+            return None
+        if 1 <= choice <= len(rooms):
+            return choice
+        else:
+            os.system('cls' if os.name == 'nt' else 'clear')
+            print("Неверный ввод. Пожалуйста, выберите номер комнаты из списка.")
+            return None
+

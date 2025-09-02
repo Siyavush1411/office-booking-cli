@@ -10,7 +10,10 @@ class TextMarkupBuilder:
 
     def __getattr__(self, align):
 
-        width = os.get_terminal_size().columns
+        try:
+            width = os.get_terminal_size().columns
+        except OSError:
+            width = 80
 
         if align == "center":
             return self.text.center(width)
