@@ -47,6 +47,5 @@ def send_email(to, subject, body):
     s.send(body.encode("utf-8"))
     s.send("\r\n.\r\n".encode())
 
-    print(f"Уведомление отправлено на адрес {to}")
     send_cmd(s, "QUIT")
     s.close()
