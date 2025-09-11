@@ -6,6 +6,7 @@ from .menu import MainMenuView
 from .utils.user_confirmations import UserConfirmations
 from .utils.user_action_lazy_init import UserActionLazyInitialization
 from services.user_service import UserService
+from services.booking_services import BookingDisplayService
 from services import add_to_notification
 from common import save_current_user_to_session, get_current_user_from_session
 
@@ -62,17 +63,41 @@ class UserLoginView:
         save_current_user_to_session(user_id=user.id)
 
 
+is_auth = False
+
+
 class UserActionView(UserActionLazyInitialization):
     def display_user_dashboard(self):
-        self.view_service.start()
-        user_input = input("Нажмите 1 для регистрации или 2 для входа: ")
-        is_success = self._user_auth_choice(user_input)
-        if is_success:
-            result = self._user_room_choice()
-            selected_room = Room.get("id", result)
-            self.booking_room(room_id=selected_room.id)
-            selected_room.update(selected_room.id, is_busy=True)
-            print("Комната успешно забронирована! Мы пришлем уведомление при освобождении комнаты.")
+        global is_auth
+        is_success = False
+
+        if not is_auth:
+            self.view_service.start()
+            user_input = input("Нажмите 1 для регистрации или 2 для входа: ")
+            is_success = self._user_auth_choice(user_input)
+            is_auth = True
+
+        print("1 - забронировать комнату\n2 - просмотреть все брони")
+        inp = int(input())
+
+        if inp == 1:
+            if is_success or is_auth:
+                result = self._user_room_choice()
+                selected_room = Room.get("id", result)
+                if selected_room is not None:
+                    self.booking_room(room_id=selected_room.id)
+                    selected_room.update(selected_room.id, is_busy=True)
+                    print("Комната успешно забронирована! Мы пришлем уведомление при освобождении комнаты.\nЧто нибудь еще?")
+                else:
+                    print("Ошибка: выбранная комната не найдена.")
+                return self.display_user_dashboard()
+
+        else:
+            os.system("cls" if os.name == "nt" else "clear")
+            booking_display_service = BookingDisplayService()
+            booking_display_service.display_all_bookings()
+            return self.display_user_dashboard()
+
 
     def booking_room(self, room_id: int):
         user_id = get_current_user_from_session()
@@ -120,7 +145,9 @@ class UserActionView(UserActionLazyInitialization):
 
     def _user_room_choice(self):
         self.room_display.display_all_rooms()
-        user_input = input("Выберите номер комнаты: ")
+        user_input = input("Выберите номер комнаты q - выход: ")
+        if user_input == "q":
+            return self.display_user_dashboard()
         rooms = Room.get_all()
         try:
             choice = int(user_input)

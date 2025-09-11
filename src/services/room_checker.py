@@ -34,9 +34,13 @@ class RoomChecker:
             bookings = [b for b in Booking.get_all() if b.is_actual]
             for booking in bookings:
                 if room.id == booking.room_id:
-                    if datetime.strptime(booking.end_time, "%Y-%m-%d %H:%M") < datetime.now():
+                    if datetime.strptime(booking.end_time + ':00', "%Y-%m-%d %H:%M:%S") < datetime.now():
                         room.update(room.id, is_busy=False)
-                        user_email = User.get("id", booking.user_id).email
+                        user = User.get("id", booking.user_id)
+                        if user is None:
+                            user = "Пользователь удален"
+                            return None
+                        user_email = user.email
                         send_email(user_email, "Office-booking-cli", "время на бронирование истекло!")
                         booking.update(booking.id, is_actual=False)
 

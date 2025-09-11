@@ -5,7 +5,7 @@ import base64
 HOST = "smtp.gmail.com"
 PORT = 587
 USERNAME = "siyavushmirzaev375@gmail.com"
-PASSWORD = "zicv jtnl baik iylg"  
+PASSWORD = "zicv jtnl baik iylg"
 
 
 def send_cmd(sock, cmd):
@@ -47,6 +47,5 @@ def send_email(to, subject, body):
     s.send(body.encode("utf-8"))
     s.send("\r\n.\r\n".encode())
 
-    print(f"Email sent successfully to user {to}")
     send_cmd(s, "QUIT")
     s.close()

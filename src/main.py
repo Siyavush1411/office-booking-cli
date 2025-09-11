@@ -9,8 +9,6 @@ from services.booking_services import BookingDisplayService
 
 def main():
     init_db()
-    booking_display_service = BookingDisplayService()
-    booking_display_service.display_all_bookings()
 
     start_background_checker()
     
