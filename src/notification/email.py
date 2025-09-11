@@ -5,7 +5,7 @@ import base64
 HOST = "smtp.gmail.com"
 PORT = 587
 USERNAME = "siyavushmirzaev375@gmail.com"
-PASSWORD = "zicv jtnl baik iylg"
+PASSWORD = ""
 
 
 def send_cmd(sock, cmd):
