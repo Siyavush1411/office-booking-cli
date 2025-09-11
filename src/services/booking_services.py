@@ -18,7 +18,6 @@ class BookingDisplayService:
 
     def display_all_bookings(self):
         bookings = self.booking_service.get_all_bookings()
-        print(bookings)
         print('┏' + '━' * 80 + '┓')
         for i, booking in enumerate(bookings, start=0):
             user = User.get("id", booking.user_id)
