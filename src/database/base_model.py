@@ -43,7 +43,7 @@ class BaseModel:
         rows = cursor.fetchall()
         column_names = [name[0] for name in cursor.description]
         conn.close()
-        objects = []
+        objects: list[cls] = []
         for row in rows:
             data = {name: value for name, value in zip(column_names, row)}
             id_value = data.pop("id", None)
