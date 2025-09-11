@@ -43,6 +43,7 @@ class RoomChecker:
                         user_email = user.email
                         send_email(user_email, "Office-booking-cli", "время на бронирование истекло!")
                         booking.update(booking.id, is_actual=False)
+                        print(booking)
 
 
 

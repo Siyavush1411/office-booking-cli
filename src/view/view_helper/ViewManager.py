@@ -8,7 +8,8 @@ class ViewManager:
 
     @staticmethod
     def style_text(text: str) -> str:
-        return TextStyle(text)
+        text: str = TextStyle(text)
+        return text
 
     @staticmethod
     def align_text(text: str) -> str:
@@ -22,3 +23,8 @@ class ViewManager:
         for line in str_list:
             centered_lines.append(ViewManager.align_text(line).center)
         return "\n".join(centered_lines)
+    
+    @staticmethod
+    def pad_ansi(text_obj, width):
+        raw_len = len(text_obj.text)
+        return f"{text_obj}{' ' * (width - raw_len)}"
