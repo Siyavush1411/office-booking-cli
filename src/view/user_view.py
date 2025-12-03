@@ -26,7 +26,6 @@ class ViewService:
         self.display_login_form()
 
 
-
 class UserRegistrationView:
     def __init__(self):
         self.view_service = ViewService()
@@ -97,7 +96,6 @@ class UserActionView(UserActionLazyInitialization):
             booking_display_service = BookingDisplayService()
             booking_display_service.display_all_bookings()
             return self.display_user_dashboard()
-
 
     def booking_room(self, room_id: int):
         user_id = get_current_user_from_session()

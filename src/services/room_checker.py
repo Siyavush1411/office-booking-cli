@@ -3,7 +3,8 @@ from datetime import datetime
 from multiprocessing import Process
 
 from models import Booking, Room, User
-from notification.email import send_email
+from notification import send_to_email
+from notification import send_to_phone_number
 
 for_notification = []
 
@@ -25,7 +26,7 @@ class RoomChecker:
                 for user_id, room_id in notifications_for_room:
                     for_notification.remove((user_id, room_id))
                     user = User.get("id", user_id)
-                    send_email(
+                    send_to_email(
                         user.email,
                         "Office-booking-cli",
                         f"Комната {room.name} теперь свободна!",
@@ -40,7 +41,8 @@ class RoomChecker:
                         booking.update(booking.id, is_actual=False)
                         if user:
                             user_email = user.email
-                            send_email(user_email, "Office-booking-cli", "время на бронирование истекло!")
+                            send_to_email(user_email, "Office-booking-cli", "время на бронирование истекло!")
+                            send_to_phone_number()
 
 
 
