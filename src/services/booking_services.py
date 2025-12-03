@@ -1,3 +1,4 @@
+from typing import List
 from models import Room, Booking, User
 from common.table_constants import (
     TABLE_ROOM_HEADER,
@@ -7,7 +8,7 @@ from common.table_constants import (
 
 
 class BookingService:
-    def get_all_bookings(self) -> list:
+    def get_all_bookings(self) -> List[Booking]:
         booking = Booking.get_all()
         return booking
 
@@ -18,8 +19,12 @@ class BookingDisplayService:
 
     def display_all_bookings(self):
         bookings = self.booking_service.get_all_bookings()
-        print('┏' + '━' * 80 + '┓')
+        print('┏' + '━' * 99 + '┓')
+        print(f"┃ {"Название комнаты":<29} ┃ {"Имя пользователя":<24} ┃ {"Статус":<19} ┃ {"Занята до":<16} ┃")
+        print('┣' + '━' * 99 + '┫')
         for i, booking in enumerate(bookings, start=0):
+            if not booking.is_actual:
+                continue
             user = User.get("id", booking.user_id)
             if user is None:
                 user = "Пользователь удален"
@@ -27,7 +32,7 @@ class BookingDisplayService:
                 user = user.username
             room = Room.get("id", booking.room_id)
             status = "занята" if booking.is_actual else "свободна"
-            print(f"┃ {room.name:<29} ┃ {user:<24} ┃ {status:<19} ┃")
+            print(f"┃ {room.name:<29} ┃ {user:<24} ┃ {status:<19} ┃ {booking.end_time} ┃")
             if i != len(bookings) - 1:
-                print('┣' + '━' * 80 + '┫')
-        print('┗' + '━' * 80 + '┛')
+                print('┣' + '━' * 99 + '┫')
+        print('┗' + '━' * 99 + '┛')

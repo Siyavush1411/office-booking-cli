@@ -13,7 +13,7 @@ def send_cmd(sock, cmd):
     return sock.recv(1024).decode()
 
 
-def send_email(to, subject, body):
+def send_to_email(to, subject, body):
     FROM = USERNAME
 
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
