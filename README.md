@@ -27,7 +27,7 @@
 
 1.  **Клонируйте репозиторий:**
     ```bash
-    git clone https://github.com/your-username/office-booking-cli.git
+    git clone https://github.com/Siyavush1411/office-booking-cli.git
     cd office-booking-cli
     ```
 
